@@ -20,7 +20,6 @@ def build_debug() -> Injector:
     injector.register(
         IService,
         provider=lambda: DebugService(
-            # Этот метод возвращает экземпляр объекта, реализующего указанный интерфейс.
             logger=injector.get_instance(ILogger),
             fetcher=injector.get_instance(IFetcher),
         ),
@@ -41,19 +40,15 @@ def build_release() -> Injector:
         ),
         lifestyle=LifeStyle.PER_REQUEST,
     )
-    # устанавливает жизненный цикл и, опционально, предоставляет параметры для конструктора реализации
+   
     injector.register(str, lambda: str(uuid4()), LifeStyle.PER_REQUEST)
     return injector
 
 
 def demo(injector: Injector, tag: str):
     print(f"\n=== {tag} ===")
-    # Создается только один экземпляр объекта на все приложение.
     print("Singleton logger:", injector.get_instance(ILogger), injector.get_instance(ILogger))
-    # Scope 1
-    # Создается один экземпляр объекта на область видимости (scope).
-    # Область видимости определяется с помощью injector.create_scope().
-    # Внутри области видимости всегда будет использоваться один и тот же экземпляр.
+
     with injector.create_scope():
         service_1 = injector.get_instance(IService)
         service_2 = injector.get_instance(IService)
@@ -61,12 +56,10 @@ def demo(injector: Injector, tag: str):
         service_1.run()
         fetcher_1 = injector.get_instance(IFetcher)
         fetcher_2 = injector.get_instance(IFetcher)
-        print("Scoped fetcher:", fetcher_1, fetcher_2)
-    # Scope 2
+
     with injector.create_scope():
         print("New scope, new fetcher:", fetcher_1, injector.get_instance(IFetcher))
         injector.get_instance(IService).run()
-    # PerRequests - Создается новый экземпляр объекта каждый раз, когда он запрашивается.
     print("uuid:", injector.get_instance(str))
 
 if __name__ == "__main__":
