@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Иванов Иван",
+    "login": "ivan",
+    "password": "ivanov",
+    "email": "jivan52@gmail.com",
+    "address": null
+  },
+  {
+    "id": 2,
+    "name": "Иванов Иван",
+    "login": "andrey",
+    "password": "petrov",
+    "email": "petrov36@gmail.com",
+    "address": null
+  }
+]
